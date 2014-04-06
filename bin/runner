@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+require 'bundler/setup'
+require_relative "../lib/unscaled"
+require_relative "../lib/unscaled/runner"
+
+CONFIGS = {
+  "foo" => {
+    processes: [
+      {id: 1, command: 'ls /'},
+      {id: 2, command: 'python -m SimpleHTTPServer 8000'}
+    ]
+  }
+}
+
+runner = Unscaled::Runner.new(ARGV[0])
+
+require 'pry'; binding.pry
