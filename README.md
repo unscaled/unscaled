@@ -21,7 +21,12 @@ This runs on every server that you want to run processes on.
 
 ## HTTP Load Balancer
 
-If you spin up another web process, you probably want it to receive web requests from your load balancer. In order to facilitate this, you configure your process so send heartbeats to the cloud manager. Cloud manager then adds the process to your load balancer. Plugins exist for several load balancers, like HAproxy and nginx.
+If you spin up another web process, you probably want it to receive web requests from your load balancer. 
+
+* Your process sends heartbeats to the cloud manager. 
+* Cloud manager then adds the process to your load balancer. 
+* Plugins exist for several load balancers, like HAproxy and nginx.
+* If heartbeats stop, process gets kicked out of the load balancer.
 
 
 
