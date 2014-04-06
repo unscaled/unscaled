@@ -1,7 +1,28 @@
 unscaled
 ========
 
-The worlds least scalable cloud computing platform. Hosts on your own servers.
+A cloud platform for people who don't need to be webscale. Hosts on your own servers. 12-factor ready.
+
+# The following is not implemented yet. README-driven development.
+
+Consists of the following components.
+
+## Cloud manager
+
+You run this on some server. It provides APIs used by the other components.
+
+## Process manager
+
+This runs on every server that you want to run processes on.
+
+* Queries the cloud manager to get a list of the processes it should be running. 
+* Passes configuration as environment variables to the processes it runs.
+* Captures the stdout/stderr streams and ships them back to the central service.
+
+## HTTP Load Balancer
+
+If you spin up another web process, you probably want it to receive web requests from your load balancer. In order to facilitate this, you configure your process so send heartbeats to the cloud manager. Cloud manager then adds the process to your load balancer. Plugins exist for several load balancers, like HAproxy and nginx.
+
 
 
 ## Incoherent thoughts
