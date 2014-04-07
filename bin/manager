@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require 'sinatra'
-require 'json'
+require 'sinatra/json'
 
-get '/' do
-  JSON.dump "FOO"
+
+get '/runners/foo.:format' do
+  json(processes: {3 => {id: 3, command: 'python -m SimpleHTTPServer 8001'},
+                   4 => {id: 4, command: 'python -m SimpleHTTPServer 8021'},
+                   2 => {id: 2, command: 'python -m SimpleHTTPServer 8000'}})
 end

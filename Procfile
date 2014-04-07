@@ -1,0 +1,1 @@
+manager: bundle exec bin/manager

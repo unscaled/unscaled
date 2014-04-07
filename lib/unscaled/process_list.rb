@@ -29,5 +29,13 @@ module Unscaled
         list[id] = process
       end
     end
+
+    def stdouts
+      list.values.map(&:stdout)
+    end
+
+    def stderrs
+      list.values.map(&:stderr)
+    end
   end
 end

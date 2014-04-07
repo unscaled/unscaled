@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'bundler/setup'
 require_relative "../lib/unscaled"
+require 'active_support/all'
 
 CONFIGS = {
   "foo" => {
@@ -11,6 +12,46 @@ CONFIGS = {
   }
 }
 
-process_list = Unscaled::ProcessList.new(CONFIGS["foo"][:processes])
+raise "Must give name" unless ARGV[0].present?
+process_list = Unscaled::ProcessList.new
+
+require 'httparty'
+updater = Thread.new do
+  loop do
+    puts "Updating config"
+
+    config = HTTParty.get("http://localhost:4567/runners/#{ARGV[0]}.json")
+    puts "Received #{config.inspect}"
+
+    process_list.update(config["processes"].with_indifferent_access)
+    sleep(60)
+  end
+end
+
+printer = Thread.new do
+  begin
+    loop do
+      io = IO.select(process_list.stdouts + process_list.stderrs, nil, nil, 1)
+
+      if io.nil?
+        # nothing
+      else
+        io.first.each do |reader|
+          next if reader.eof?
+
+          data = reader.gets
+          puts "IO #{reader.inspect}: #{data.inspect}"
+        end
+      end
+    end
+  rescue Exception => e
+    puts e.message
+    puts e.backtrace.inspect
+  end
+end
 
 require 'pry'; binding.pry
+
+updater.join
+printer.join
+
